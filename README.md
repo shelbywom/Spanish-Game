@@ -1,122 +1,71 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Spanish Game</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Spanish Game</div>
-      </div>
-    </div>
-    <script>
+### Mario Spanish Learning Game
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var warningBanner = document.querySelector("#unity-warning");
+## Welcome to the Mario Spanish Learning Game! This game combines classic Mario gameplay with educational elements to help you learn Spanish while having fun.
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
+## Installation
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebGL.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/WebGL.data.br",
-        frameworkUrl: buildUrl + "/WebGL.framework.js.br",
-        codeUrl: buildUrl + "/WebGL.wasm.br",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "Spanish Game",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
+### Setting Up WAMP Server
 
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
+1. **Download WAMP Server**:
+   - Go to the [WAMP Server website](http://www.wampserver.com/en/) and download the latest version suitable for your operating system.
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
+2. **Install WAMP Server**:
+   - Follow the installation instructions provided on the WAMP Server website.
+   - Make sure to choose appropriate configurations during installation.
 
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        container.className = "unity-mobile";
-        canvas.className = "unity-mobile";
+3. **Start WAMP Server**:
+   - After installation, launch WAMP Server.
+   - Ensure that the server is running properly by checking the system tray for the WAMP icon.
 
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
+### Setting Up Database
+
+1. **Database Setup**:
+   - Open your preferred web browser and navigate to `http://localhost/phpmyadmin/` to access phpMyAdmin.
+
+2. **Create Database**:
+   - Click on the "Databases" tab and create a new database for your game.
+
+3. **Import Questions**: (See Adding Questions to Database for additional help)
+   - Import the provided array of Spanish learning questions into your database.
+   - Make sure the table structure matches the expected format used by the game.
+
+### Unity Setup
+
+1. **Download Unity**:
+   - If you haven't already, download and install the Unity game engine from the [Unity website](https://unity.com/).
+
+2. **Clone Repository**:
+   - Clone or download the repository containing your Unity game scripts.
+
+3. **Open Project in Unity**:
+   - Launch Unity and open the project folder containing your game scripts.
+
+4. **Configure Database Connection**:
+   - Open the scripts responsible for database connection (e.g., QuestionManager.cs).
+   - Update the connection settings to point to your local WAMP server and database.
+
+5. **Build and Run**:
+   - Build the game for your desired platform (e.g., Windows, macOS).
+   - Run the game and start playing!
 
 
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+### Adding Questions to Database
 
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
+1. **Use PHP Script**:
+   - Locate the provided PHP script (`mass_adder.php`) in the WAMP/PHP folder of the repository.
 
-      loadingBar.style.display = "block";
+2. **Configure Script**:
+   - Open the `mass_adder.php` script in a text editor.
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-              }).catch((message) => {
-                alert(message);
-              });
-            };
+3. **Update Database Connection**:
+   - Update the database connection settings in the script to match your WAMP server configuration.
+   - Modify the database name, username, password, and hostname as needed. (This is usually user: root, no password)
 
-      document.body.appendChild(script);
+4. **Run Script**:
+   - Open a web browser and navigate to `http://localhost/mass_adder.php`.
+   - This will execute the PHP script and add the questions to your database.
 
-    </script>
-  </body>
-</html>
+5. **Verify Data**:
+   - After running the script, verify that the questions have been successfully added to your database by checking phpMyAdmin.
+
+6. **Optional**: You can modify the PHP script to handle additional functionalities such as error handling, input validation, or bulk data insertion if needed.
