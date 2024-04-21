@@ -8,6 +8,14 @@ public class Koopa : MonoBehaviour
     private bool shelled;
     private bool pushed;
 
+    private void Update()
+    {
+        if (!shelled)
+        {
+            GetComponent<EntityMovement>().enabled = true;
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!shelled && collision.gameObject.CompareTag("Player"))
@@ -24,7 +32,12 @@ public class Koopa : MonoBehaviour
             }
             else
             {
-                player.Hit();
+                // Check if the player hit the Koopa from the sides
+                Vector2 collisionDirection = collision.transform.position - transform.position;
+                if (Mathf.Abs(collisionDirection.x) > Mathf.Abs(collisionDirection.y))
+                {
+                    player.Hit();
+                }
             }
         }
     }
@@ -56,6 +69,10 @@ public class Koopa : MonoBehaviour
         {
             Hit();
         }
+        else if (shelled && pushed && other.gameObject.CompareTag("Enemy")) // New condition
+        {
+            Destroy(other.gameObject); // Destroy the Goomba
+        }
     }
 
     private void EnterShell()
@@ -64,7 +81,6 @@ public class Koopa : MonoBehaviour
 
         GetComponent<SpriteRenderer>().sprite = shellSprite;
         GetComponent<AnimatedSprite>().enabled = false;
-        GetComponent<EntityMovement>().enabled = false;
     }
 
     private void PushShell(Vector2 direction)

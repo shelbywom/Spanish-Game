@@ -6,13 +6,16 @@ public class BlockHit : MonoBehaviour
     public GameObject item;
     public Sprite emptyBlock;
     public int maxHits = -1;
+    public QuestionManager questionManager;
     private bool animating;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!animating && maxHits != 0 && collision.gameObject.CompareTag("Player"))
+        // Check if the collision is with a mystery block
+        if (!animating && maxHits != 0 && collision.gameObject.CompareTag("Player") && gameObject.CompareTag("MysteryBlock"))
         {
-            if (collision.transform.DotTest(transform, Vector2.up)) {
+            if (collision.transform.DotTest(transform, Vector2.up))
+            {
                 Hit();
             }
         }
@@ -20,16 +23,21 @@ public class BlockHit : MonoBehaviour
 
     private void Hit()
     {
+        Debug.Log("Hit method called. Animating: " + animating + ", MaxHits: " + maxHits);
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = true; // show if hidden
 
         maxHits--;
 
-        if (maxHits == 0) {
+        if (maxHits == 0)
+        {
             spriteRenderer.sprite = emptyBlock;
         }
 
-        if (item != null) {
+        questionManager.ShowQuestion();
+
+        if (item != null)
+        {
             Instantiate(item, transform.position, Quaternion.identity);
         }
 
@@ -66,5 +74,4 @@ public class BlockHit : MonoBehaviour
 
         transform.localPosition = to;
     }
-
 }

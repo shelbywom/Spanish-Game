@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 6466448899013032572}
   - component: {fileID: 4427925599104105790}
   - component: {fileID: 8239203452023867337}
-  - component: {fileID: 1683193332185489108}
   - component: {fileID: 8531276911669952181}
   - component: {fileID: -6419197134736165423}
+  - component: {fileID: 1683193332185489108}
+  - component: {fileID: 8963175155655382346}
   m_Layer: 6
   m_Name: Goomba
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,7 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6466448899013032572
 SpriteRenderer:
@@ -151,22 +152,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &1683193332185489108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3199111054449777124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 311206314d19eab46bea7afd6798565a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: d6ee1f86f10a6d04e9e63ab52cda9ca2, type: 3}
-  - {fileID: 21300000, guid: 8dec0ffae4800154680a230ec6ec3dba, type: 3}
-  framerate: 0.25
 --- !u!114 &8531276911669952181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,3 +179,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flatSprite: {fileID: 21300000, guid: 01b97a328ea413a4f889ac9455baadae, type: 3}
+--- !u!114 &1683193332185489108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199111054449777124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311206314d19eab46bea7afd6798565a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: d6ee1f86f10a6d04e9e63ab52cda9ca2, type: 3}
+  - {fileID: 21300000, guid: 8dec0ffae4800154680a230ec6ec3dba, type: 3}
+  framerate: 0.25
+--- !u!114 &8963175155655382346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199111054449777124}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4c78c9bdd6fe6498f253315472ed29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 6466448899013032572}
+  deadSprite: {fileID: 0}
