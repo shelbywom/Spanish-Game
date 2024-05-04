@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +11,15 @@ public class GameManager : MonoBehaviour
     public int stage { get; private set; }
     public int lives { get; private set; }
     public int coins { get; private set; }
+    public int CalculateTotalScore()
+    {
+        // Calculate the total score based on your game logic
+        return coins + lives * 100;
+    }
+
+
+    public TextMeshProUGUI coinsText;
+    public TextMeshProUGUI livesText;
 
     private void Awake()
     {
@@ -43,15 +54,22 @@ public class GameManager : MonoBehaviour
         lives = 3;
         coins = 0;
 
+        UpdateUI();
+
         LoadLevel(1, 1);
     }
 
     public void GameOver()
     {
-        // TODO: show game over screen
+        // Submit high score
+        HighScoreManager.Instance.AddHighScore("PlayerName", CalculateTotalScore());
 
+        // TODO: Show game over screen
+
+        Debug.Log("Game Over!");
         NewGame();
     }
+
 
     public void LoadLevel(int world, int stage)
     {
@@ -76,6 +94,8 @@ public class GameManager : MonoBehaviour
     {
         lives--;
 
+        Debug.Log("Lives: " + lives); // Add debug statement
+
         if (lives > 0)
         {
             LoadLevel(world, stage);
@@ -90,16 +110,32 @@ public class GameManager : MonoBehaviour
     {
         coins++;
 
-        if (coins == 100)
+        if (coins >= 100)
         {
-            coins = 0;
+            coins -= 100;
             AddLife();
         }
+
+        UpdateUI();
     }
 
     public void AddLife()
     {
         lives++;
+
+        UpdateUI();
     }
 
+    public void UpdateUI()
+    {
+        if (coinsText != null)
+        {
+            coinsText.text = "Coins: " + coins.ToString();
+        }
+
+        if (livesText != null)
+        {
+            livesText.text = "Lives: " + lives.ToString();
+        }
+    }
 }

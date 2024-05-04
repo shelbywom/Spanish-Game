@@ -6,7 +6,7 @@ public class BlockHit : MonoBehaviour
     public GameObject item;
     public Sprite emptyBlock;
     public int maxHits = -1;
-    public QuestionManager questionManager;
+    public QuestionManager questionManager; // Make sure to assign this reference in the Inspector
     private bool animating;
 
     private void OnCollisionEnter2D(Collision2D collision)

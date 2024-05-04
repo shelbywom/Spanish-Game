@@ -23,17 +23,9 @@ public class QuestionManager : MonoBehaviour
             button.gameObject.SetActive(false);
         }
 
-        // Check if all buttons have been assigned
-        if (answerButtons.Count < 3 || answerButtons[0] == null || answerButtons[1] == null || answerButtons[2] == null)
-        {
-            Debug.LogError("Not all answer buttons have been assigned in the Inspector.");
-            return;
-        }
-
-        StartCoroutine(GetQuestions()); // Call GetQuestions to populate the questions list
+        // Call GetQuestions to populate the questions list
+        StartCoroutine(GetQuestions());
     }
-
-
 
     IEnumerator GetQuestions()
     {
@@ -43,7 +35,7 @@ public class QuestionManager : MonoBehaviour
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError)
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 Debug.Log(": Error: " + webRequest.error);
             }
@@ -63,8 +55,6 @@ public class QuestionManager : MonoBehaviour
                     {
                         string questionText = data[0];
                         string correctAnswer = data[1];
-
-                        // Assign incorrect answers directly to the array
                         string[] incorrectAnswers = new string[] { data[2], data[3], data[4] };
 
                         // Create a new Question object and add it to the questions list
@@ -129,12 +119,11 @@ public class QuestionManager : MonoBehaviour
                 continue;
             }
 
-            buttonText.text = ((char)('a' + i)).ToString() + ") " + currentQuestion.answers[i];
+            buttonText.text = currentQuestion.answers[i];
             answerButtons[i].gameObject.SetActive(true);
-            answerButtons[i].onClick.AddListener(() => CheckAnswer(answerButtons[i]));
+            answerButtons[i].onClick.AddListener(() => CheckAnswer(buttonText.text));
         }
     }
-
 
     private Question GetRandomQuestion()
     {
@@ -148,18 +137,16 @@ public class QuestionManager : MonoBehaviour
         return questions[randomIndex];
     }
 
-
-    private void CheckAnswer(Button button)
+    private void CheckAnswer(string selectedAnswer)
     {
-        string selectedAnswer = button.GetComponentInChildren<TextMeshProUGUI>().text;
-
         if (selectedAnswer == currentQuestion.correctAnswer)
         {
             // Award mystery item and coins
+            Debug.Log("Correct answer selected. Rewarding player...");
         }
         else
         {
-            // Handle incorrect answer
+            // Handle incorrect answer (nothing to do here since the game will continue)
             Debug.Log("Incorrect answer selected.");
         }
 
@@ -171,8 +158,6 @@ public class QuestionManager : MonoBehaviour
             answerButton.gameObject.SetActive(false);
         }
     }
-
-
 }
 
 [System.Serializable]
@@ -182,20 +167,17 @@ public class Question
     public List<string> answers;
     public string correctAnswer;
 
-    public Question(string question, string correctAnswerLetter, params string[] incorrectAnswers)
+    public Question(string question, string correctAnswer, string[] incorrectAnswers)
     {
         this.question = question;
-
-        // Add all answers to the list
+        this.correctAnswer = correctAnswer;
         this.answers = new List<string>(incorrectAnswers);
+        this.answers.Add(correctAnswer);
+        ShuffleAnswers();
+    }
 
-        // Determine the index of the correct answer based on the letter
-        int correctAnswerIndex = correctAnswerLetter.ToLower() == "a" ? 0 : correctAnswerLetter.ToLower() == "b" ? 1 : 2;
-
-        // Store the correct answer
-        this.correctAnswer = this.answers[correctAnswerIndex];
-
-        // Shuffle the answers
+    private void ShuffleAnswers()
+    {
         for (int i = 0; i < answers.Count; i++)
         {
             string temp = answers[i];
