@@ -23,7 +23,8 @@
    - Open your preferred web browser and navigate to `http://localhost/phpmyadmin/` to access phpMyAdmin.
 
 2. **Create Database**:
-   - Click on the "Databases" tab and create a new database for your game.
+   - Click on the "Databases" tab and create a new database for your game. Title it "spanishquestions".
+   - You will need two tables. "questions" and 'high scores". In Questions, you will need 5 rows: Question, Correct Answer, and Inorrect Answer 1,2,3, In The high scores table, you only need two rows, "PlayerName" and "TotalScore".
 
 3. **Import Questions**: (See Adding Questions to Database for additional help)
    - Import the provided array of Spanish learning questions into your database.
@@ -41,8 +42,7 @@
    - Launch Unity and open the project folder containing your game scripts.
 
 4. **Configure Database Connection**:
-   - Open the scripts responsible for database connection (e.g., QuestionManager.cs).
-   - Update the connection settings to point to your local WAMP server and database.
+   - Open the scripts responsible for database connection (e.g., QuestionManager.cs). You would use a domain like localhost/script.php
 
 5. **Build and Run**:
    - Build the game for your desired platform (e.g., Windows, macOS).
@@ -52,20 +52,16 @@
 ### Adding Questions to Database
 
 1. **Use PHP Script**:
-   - Locate the provided PHP script (`mass_adder.php`) in the WAMP/PHP folder of the repository.
+   - Locate the provided PHP script (`MassAdder.php`) in the WAMP/PHP folder of the repository.
 
 2. **Configure Script**:
-   - Open the `mass_adder.php` script in a text editor.
+   - Open the `MassAdder.php` script in a text editor.
 
-3. **Update Database Connection**:
-   - Update the database connection settings in the script to match your WAMP server configuration.
-   - Modify the database name, username, password, and hostname as needed. (This is usually user: root, no password)
-
-4. **Run Script**:
-   - Open a web browser and navigate to `http://localhost/mass_adder.php`.
+3. **Run Script**:
+   - Open a web browser and navigate to `http://localhost/MassAdder.php`.
    - This will execute the PHP script and add the questions to your database.
 
-5. **Verify Data**:
+4. **Verify Data**:
    - After running the script, verify that the questions have been successfully added to your database by checking phpMyAdmin.
 
-6. **Optional**: You can modify the PHP script to handle additional functionalities such as error handling, input validation, or bulk data insertion if needed.
+5. **Optional**: You can modify the PHP script to handle additional functionalities such as error handling, input validation, or bulk data insertion if needed.
